@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from '../App.vue'
+// import App from '../App.vue'
 import Router from 'vue-router'
 
 import Login from '../views/Login.vue'
@@ -13,36 +13,33 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            name: 'Main',
-            redirect: '/index',
-            component: App,
+            name: 'Index',
+            redirect: '/wellcome',
+            component: Index,
             children: [
                 {
-                    path: '/login',
-                    name: 'Login',
-                    component: Login,
-                    meta: {keepAlive: true}
+                    path: '/wellcome',
+                    name: 'wellcome',
+                    component: () =>import('../views/Wellcome.vue')
                 },
                 {
-                    path: '/index',
-                    name: 'Index',
-                    component: Index,
-                    meta: {keepAlive: true},
-                    children: [
-                        {
-                            path: '/user/account',
-                            name: 'userAccount',
-                            component: () =>import('../views/userManager/user.vue')
-                        }
-                    ]
+                    path: '/user/account',
+                    name: 'userAccount',
+                    component: () =>import('../views/userManager/user.vue')
                 },
-                {
-                    path: '/*',
-                    name: '404',
-                    component: () => import('../views/404.vue')
-                }
             ]
         },
+        {
+            path: '/login',
+            name: 'Login',
+            component: Login,
+            meta: {keepAlive: true}
+        },
+        {
+            path: '*',
+            name: 'notFound',
+            component: () => import('../views/404.vue')
+        }
         // {
         //     path: '/',
         //     name: 'Main',

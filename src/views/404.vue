@@ -1,7 +1,7 @@
 <template>
   <div class="404">
       404 page
-      <button @click="$router.push('/index')"> jump home</button>
+      <button @click="$router.push('/')"> jump home</button>
   </div>
 </template>
 
