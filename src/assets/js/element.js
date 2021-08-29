@@ -6,11 +6,24 @@ import {
     Main,
     Row,
     Col,
+    Form,
+    FormItem,
+    Input,
+    Button,
+    Message,
+    Menu,
+    Submenu,
+    MenuItem
+
+
+
+
+
+
 
 
 } from 'element-ui'
-
-
+import 'element-ui/lib/theme-chalk/index.css';
 
 
 Vue.use(Container);
@@ -19,11 +32,30 @@ Vue.use(Aside);
 Vue.use(Main);
 Vue.use(Row);
 Vue.use(Col);
+Vue.use(Form);
+Vue.use(FormItem);
+Vue.use(Input);
+Vue.use(Button);
+Vue.use(Menu);
+Vue.use(Submenu);
+Vue.use(MenuItem);
 
 
 
 
-
-
-
+// 提示类组件需挂载
+Vue.prototype.$message = {
+    info: msg => {
+        Message({type: 'success', message: msg, duration: 5000});
+    },
+    success: msg => {
+        Message({type: 'success', message: msg, duration: 2000});
+    },
+    error: msg => {
+        Message({type: 'error', message: msg, duration: 3000});
+    },
+    warning: msg => {
+        Message({type: 'warning', message: msg, duration: 3000});
+    }
+}
 

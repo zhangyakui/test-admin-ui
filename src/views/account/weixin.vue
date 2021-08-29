@@ -1,6 +1,6 @@
 <template>
-  <div class="user page">
-      user page
+  <div class="weixin">
+      weixin page
   </div>
 </template>
 
@@ -10,8 +10,6 @@ export default {
 }
 </script>
 
-<style scoped>
- 
-
+<style>
 
 </style>
