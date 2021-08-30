@@ -16,7 +16,7 @@ const loginPage = {
     meta: {keepAlive: true}
 }
 
-// 404页面
+// 404页面 
 const _404Page = {
     path: '/404',
     name: '404',
@@ -81,34 +81,37 @@ let mainPage =  {
     ]
 }
 
-
 const router = new Router({
     mode: 'history',
     routes: [loginPage, mainPage, _404Page]
 })
 
 
+// 解决路由重复 重写 router.push 方法
+const routerPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+    return routerPush.call(this, location).catch(error=> error)
+}
+
 // 全局守卫
 router.beforeEach((to, from, next) => {
     if (window.localStorage.getItem('token')){// 判断token是否存在
         // 存在 判断是否去 登录页面
-        if (to.path == '/login'){// 是 跳转当前路由
-            return next(from.path)
-        }
+        if (to.path == '/login') return next(from.path)
 
-        if ((['/wellcome', '/404'].indexOf(to.path) == -1) && (!store.getters.getRouterInfo[to.path])){
+        const menu = store.getters.getRouterInfo[to.path]
+        if ((['/wellcome', '/404'].indexOf(to.path) == -1) && (!menu)){
             return next('/404')
         }
 
-    }else{// 不存在
-        if (to.path != '/login'){
-            return next('/login')
+        if (['/wellcome', '/404'].indexOf(to.path) == -1){
+            store.commit('addQuickList', {path: to.path, title: menu})// 设置快捷路由
         }
+        
+    }else{// 不存在
+        if (to.path != '/login') return next('/login')
     }
     next()
 })
 
-
 export default router;
-
-

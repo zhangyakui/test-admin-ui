@@ -13,17 +13,18 @@
            hide-required-asterisk
            >
             <el-form-item label="账号" prop="account">
-              <el-input placeholder="请输入账号" size="small" clearable v-model="loginForm.account"></el-input>
+              <el-input placeholder="请输入账号" size="small" clearable v-model="loginForm.account" @keyup.enter.native="login"></el-input>
             </el-form-item>
 
             <el-form-item label="密码" prop="password">
-              <el-input placeholder="请输入密码" size="small" clearable v-model="loginForm.password"></el-input>
+              <el-input placeholder="请输入密码" type="password" size="small" clearable v-model="loginForm.password" @keyup.enter.native="login"></el-input>
             </el-form-item>
 
             <el-form-item>
               <el-button type="primary" size="small" @click="login">登录</el-button>
             </el-form-item>
            </el-form>
+           <p> 测试用 普通用户: 15615545@qq.com 密码: test1234</p>
         </div>
         
       </div>
@@ -57,11 +58,11 @@ export default {
 
           // 登录成功
           this.$message.success(loginRsp.msg)
+          this.$store.commit('init')
           window.localStorage.setItem('token', JSON.stringify(loginRsp.data.token))// 保存token
           this.$store.commit('setUserInfo', loginRsp.data.user)// 保存用户信息
           this.$store.commit('setDeptInfo', loginRsp.data.dept)// 保存部门信息
           this.$store.commit('setRoleInfo', loginRsp.data.role)// 保存角色信息
-
 
           // 获取菜单数据
           const {data: menuRsp} = await this.$api.getMenuList()
@@ -78,8 +79,8 @@ export default {
           this.$store.commit('setRouterInfo', routerObj)
 
           this.$store.commit('setMenuInfo', menuRsp.data)
-
-          this.$router.push('/wellcome')
+          window.location.reload()// 刷新数据
+          this.$router.push('/')
         }
       });
     }

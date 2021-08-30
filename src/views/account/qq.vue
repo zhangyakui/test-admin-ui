@@ -1,5 +1,5 @@
 <template>
-  <div class="qq">
+  <div class="qq page">
       qq page
   </div>
 </template>

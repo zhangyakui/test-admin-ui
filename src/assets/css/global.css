@@ -12,6 +12,8 @@ body, html, #app {
     color: #2c3e50;
     height: 100%;
     width: 100%;
+    min-width: 960px;
+    min-height: 720px;
 }
 
 .page{
@@ -21,3 +23,32 @@ body, html, #app {
     padding: 8px;
 }
 
+
+/*滚动条样式*/
+::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+    height: 6px;
+}
+::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 6px;
+    -webkit-box-shadow: inset 0 0 6px #a0a0a0;
+    background-color:#a0a0a0;
+}
+::-webkit-scrollbar-track {/*滚动条里面轨道*/ 
+    border-radius: 6;
+    -webkit-box-shadow: inset 0 0 6px transparent; /*轨道边框颜色*/
+    background-color: transparent;
+}
+
+/* 下拉框 */
+.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+}
+.el-icon-arrow-down {
+    font-size: 12px;
+}
+.demonstration {
+    display: block;
+    color: #8492a6;
+}

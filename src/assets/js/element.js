@@ -13,9 +13,15 @@ import {
     Message,
     Menu,
     Submenu,
-    MenuItem
-
-
+    MenuItem,
+    Icon,
+    Breadcrumb,
+    BreadcrumbItem,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
+    Tag,
+    Link
 
 
 
@@ -39,8 +45,14 @@ Vue.use(Button);
 Vue.use(Menu);
 Vue.use(Submenu);
 Vue.use(MenuItem);
-
-
+Vue.use(Icon);
+Vue.use(Breadcrumb);
+Vue.use(BreadcrumbItem);
+Vue.use(Dropdown);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+Vue.use(Tag);
+Vue.use(Link);
 
 
 // 提示类组件需挂载

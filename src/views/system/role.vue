@@ -1,5 +1,5 @@
 <template>
-  <div class="role">
+  <div class="role page">
       role page
   </div>
 </template>

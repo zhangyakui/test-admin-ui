@@ -1,5 +1,5 @@
 <template>
-  <div class="office">
+  <div class="office page">
       office page
   </div>
 </template>

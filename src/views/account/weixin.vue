@@ -1,5 +1,5 @@
 <template>
-  <div class="weixin">
+  <div class="weixin page">
       weixin page
   </div>
 </template>
