@@ -19,10 +19,9 @@ axios.interceptors.request.use(request => {
         return request
     }
 
-    window.localStorage.removeItem('token')
+    window.localStorage.clear()// 清空
     router.push('/login')
     Message.error('token不存在, 请重新登录!')
-    return request
 
 }, () => {
     Message.error('服务端请求异常!')
@@ -33,14 +32,15 @@ axios.interceptors.response.use(response => {
     if (response.data.code == 400){
         Message.error('参数错误!')
     }else if (response.data.code == 401){
-        window.localStorage.removeItem('token')
+        window.localStorage.clear()// 清空        
         router.push('/login')
-        Message.error('Token已过期, 请重新登录!')
+        Message.error('登录已过期, 请重新登录!')
     }else if (response.data.code == 403){
         Message.error('您没有权限访问, 请联系管理员!')
+    }else{
+        return response
     }
-    return response
-
+    
 }, () => {
     Message.error('服务端响应异常!')
 });

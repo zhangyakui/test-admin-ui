@@ -24,7 +24,7 @@
               <el-button type="primary" size="small" @click="login">登录</el-button>
             </el-form-item>
            </el-form>
-           <p> 测试用 普通用户: 15615545@qq.com 密码: test1234</p>
+           <p> 测试用户: 15615545@qq.com 密码: test1234</p>
         </div>
         
       </div>
@@ -58,14 +58,13 @@ export default {
 
           // 登录成功
           this.$message.success(loginRsp.msg)
-          this.$store.commit('init')
           window.localStorage.setItem('token', JSON.stringify(loginRsp.data.token))// 保存token
           this.$store.commit('setUserInfo', loginRsp.data.user)// 保存用户信息
           this.$store.commit('setDeptInfo', loginRsp.data.dept)// 保存部门信息
           this.$store.commit('setRoleInfo', loginRsp.data.role)// 保存角色信息
 
           // 获取菜单数据
-          const {data: menuRsp} = await this.$api.getMenuList()
+          const {data: menuRsp} = await this.$api.getPermList()
           let routerObj = {}
           menuRsp.data.menus.forEach(list => {
             let listTitle = list.meta.title
@@ -77,15 +76,12 @@ export default {
           })
 
           this.$store.commit('setRouterInfo', routerObj)
-
           this.$store.commit('setMenuInfo', menuRsp.data)
-          window.location.reload()// 刷新数据
           this.$router.push('/')
         }
       });
     }
   }
-
 }
 </script>
 
@@ -112,7 +108,6 @@ export default {
 }
 
 .login-box-title{
-  /* border: 1px solid red; */
   text-align: center;
   font-size: 24px;
   font-weight: 1000;

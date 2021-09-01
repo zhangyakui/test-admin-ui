@@ -2,12 +2,9 @@
   <div class="index">
     <el-container class="main">
       <!-- 左 侧边栏 -->
-      <el-aside :class="{asideCollapse: isClose}">
-        <p class="aside-title">
-          <span v-if="!isClose">楠楠传媒后台 v1.0</span>
-          <span v-else>楠楠</span>
-        </p>
+      <el-aside>
         <el-menu
+        class="el-menu-vertical-demo"
         :default-active="$route.path"
         background-color="#304156"
         text-color="#FFFFFF"
@@ -15,8 +12,13 @@
         unique-opened
         :collapse="isClose"
         >
+          <p class="aside-title">
+            <span v-if="!isClose">楠楠传媒后台 v1.0</span>
+            <span v-else>楠楠</span>
+          </p>
+
           <el-submenu 
-          :index="category.path"
+          :index="category.path == null ? '' : category.path"
           v-for="(category, index) in menuInfo.menus" :key="index"
           >
             <template slot="title">
@@ -90,9 +92,18 @@
           </el-tag>
           
         </div>
+
         <!-- 页面 -->
         <el-main>
-          <router-view></router-view>
+          <!-- 缓存页面 -->
+          <transition name="el-zoom-in-top">
+            <keep-alive v-if="$route.meta.cache">
+              <router-view></router-view>
+            </keep-alive>
+            <!-- 不缓存 -->
+            <router-view v-else></router-view>
+          </transition>
+
         </el-main>
       </el-container>
     </el-container>
@@ -107,7 +118,6 @@ export default {
       userInfo: this.$store.getters.getUserInfo,
       menuInfo: this.$store.getters.getMenuInfo,
       isClose: false,// 侧边栏是否关闭
-      asideCollapse: '',// 侧边栏 类
       quickColor: '',// 快捷按钮 类
     }
   },
@@ -115,8 +125,9 @@ export default {
     // 用户操作
     command(cmd){
       if (cmd == 'exit'){// 退出登录
-        window.localStorage.clear()
+        window.localStorage.clear()// 清空
         this.$router.push('/login')
+        window.location.reload()// 刷新数据
       }
     },
     // 清空快捷路由
@@ -142,34 +153,31 @@ export default {
   .el-aside {
     background-color: #304156;
     text-align: center;
-    width: 220px !important;
-    transition-duration: 0.3s;
     overflow-x: hidden !important;
-
-  }
-
-  .asideCollapse{
-    width: 60px !important;
-    transition-duration: 0.3s;
+    width: auto !important;
   }
 
   .el-menu{
     border: 0px !important;
+    width: 200px;
     text-align: left;
     color: #FFFFFF;
   }
 
+  .el-menu-item{
+    background-color: #1f2d3d !important;
+  }
+
   .aside-title{
     color: #FFFFFF;
-    font-size: 20px;
+    font-size: 18px;
     height: 50px;
     line-height: 50px;
+    text-align: center;
   }
 
   .content{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+   
   }
 
   .el-header{
@@ -232,8 +240,9 @@ export default {
 
   .el-main {
     text-align: center;
-    flex: 1;
+    height: 1px;
     padding: 8px !important;
+    overflow: hidden !important;
   }
 
 

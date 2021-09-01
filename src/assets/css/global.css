@@ -14,16 +14,8 @@ body, html, #app {
     width: 100%;
     min-width: 960px;
     min-height: 720px;
+    overflow: hidden;
 }
-
-.page{
-    height: 100%;
-    width: 100%;
-    background-color: #fff;
-    padding: 8px;
-}
-
-
 /*滚动条样式*/
 ::-webkit-scrollbar {/*滚动条整体样式*/
     width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
@@ -40,6 +32,22 @@ body, html, #app {
     background-color: transparent;
 }
 
+.page{
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    padding: 8px;
+    overflow: auto;
+}
+
+.margin-right {
+    margin-right: 10px;
+}
+
+.button{
+    padding: 6px !important;
+}
+
 /* 下拉框 */
 .el-dropdown-link {
     cursor: pointer;
@@ -51,4 +59,23 @@ body, html, #app {
 .demonstration {
     display: block;
     color: #8492a6;
+}
+
+/* el-table 表格线对齐 */
+body .el-table th.gutter{
+    display: table-cell !important;
+}
+
+body .el-table colgroup.gutter{
+    display: table-cell !important;
+}
+
+/* 表格 添加 flexd 导致行高异常 */
+.el-table__fixed, .el-table__fixed-right{
+    height: 100% !important;
+}
+
+.el-dialog{
+    width: 650px !important;
+    text-align: left;
 }

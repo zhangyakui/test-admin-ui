@@ -21,7 +21,20 @@ import {
     DropdownMenu,
     DropdownItem,
     Tag,
-    Link
+    Link,
+    Table,
+    TableColumn,
+    Dialog,
+    Select,
+    Option,
+    Radio,
+    RadioGroup,
+    InputNumber,
+    Cascader,
+    Switch,
+    MessageBox,
+    Tree
+    
 
 
 
@@ -53,6 +66,17 @@ Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 Vue.use(Tag);
 Vue.use(Link);
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.use(Dialog);
+Vue.use(Select);
+Vue.use(Option);
+Vue.use(Radio);
+Vue.use(RadioGroup);
+Vue.use(InputNumber);
+Vue.use(Cascader);
+Vue.use(Switch);
+Vue.use(Tree)
 
 
 // 提示类组件需挂载
@@ -71,3 +95,12 @@ Vue.prototype.$message = {
     }
 }
 
+// 操作提示
+Vue.prototype.$confirm = async (desc, title, operation) => {
+    try{
+        await MessageBox.confirm(desc, title, operation)
+        return true
+    }catch{
+        return false
+    }
+}

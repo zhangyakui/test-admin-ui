@@ -23,6 +23,13 @@ const _404Page = {
     component: () => import('../views/404.vue')
 }
 
+// 找不到页面
+const noPage = {
+    path: '*',
+    name: 'no',
+    component: () => import('../views/404.vue')
+}
+
 // 主页页面
 let mainPage =  {
     path: '/',
@@ -33,49 +40,58 @@ let mainPage =  {
         {
             path: '/wellcome',
             name: 'wellcome',
+            meta: {},
             component: () => import('../views/Wellcome.vue')
         },
         // 系统管理
         {
             path: '/system/user',
             name: 'user',
+            meta: {},
             component: () => import('../views/system/user.vue')
         },
         {
             path: '/system/role',
             name: 'role',
+            meta: {},
             component: () => import('../views/system/role.vue')
         },
         {
             path: '/system/menu',
             name: 'menu',
+            meta: {},
             component: () => import('../views/system/menu.vue')
         },
         // 账号管理
         {
             path: '/account/qq',
             name: 'qq',
+            meta: {},
             component: () => import('../views/account/qq.vue')
         },
         {
             path: '/account/weixin',
             name: 'weixin',
+            meta: {},
             component: () => import('../views/account/weixin.vue')
         },
         // 文件管理
         {
             path: '/file/office',
             name: 'office',
+            meta: {},
             component: () => import('../views/file/office.vue')
         },
         {
             path: '/file/script',
             name: 'script',
+            meta: {},
             component: () => import('../views/file/script.vue')
         },
         {
             path: '/file/app',
             name: 'app',
+            meta: {},
             component: () => import('../views/file/app.vue')
         }
     ]
@@ -83,7 +99,8 @@ let mainPage =  {
 
 const router = new Router({
     mode: 'history',
-    routes: [loginPage, mainPage, _404Page]
+    scrollBehavior: () => ({ y: 0 }),
+    routes: [loginPage, mainPage, _404Page, noPage]
 })
 
 
@@ -108,6 +125,16 @@ router.beforeEach((to, from, next) => {
             store.commit('addQuickList', {path: to.path, title: menu})// 设置快捷路由
         }
         
+        // 路由追加 meta内容
+        store.getters.getMenuInfo.menus.forEach(category => {
+            category.children.forEach(menu => {
+                if (to.path == menu.path){
+                    to.meta.icon = menu.meta.icon
+                    to.meta.title = menu.meta.title
+                    to.meta.cache = menu.meta.cache
+                }
+            })
+        })
     }else{// 不存在
         if (to.path != '/login') return next('/login')
     }
