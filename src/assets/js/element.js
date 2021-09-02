@@ -33,7 +33,8 @@ import {
     Cascader,
     Switch,
     MessageBox,
-    Tree
+    Tree,
+    Tooltip
     
 
 
@@ -76,7 +77,8 @@ Vue.use(RadioGroup);
 Vue.use(InputNumber);
 Vue.use(Cascader);
 Vue.use(Switch);
-Vue.use(Tree)
+Vue.use(Tree);
+Vue.use(Tooltip);
 
 
 // 提示类组件需挂载

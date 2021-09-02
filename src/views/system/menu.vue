@@ -118,7 +118,6 @@
       <el-dialog 
       :title="dialogTitle" 
       :visible.sync="dialogFormVisible"
-      @close="resetForm"
       >
         <el-form size="mini" :model="formData" :rules="rules" ref="formData" label-suffix="：" label-width="92px">
           <el-form-item label="菜单类型" prop="type">
@@ -246,14 +245,17 @@ export default {
     },
     // 添加数据
     addData(){
-      this.dialogFormVisible = true
+      this.resetForm()
       this.dialogTitle='添加菜单'
+      this.dialogFormVisible = true
     },
     // 编辑数据
     editData(row){
-      this.dialogFormVisible = true
+      this.resetForm()
       this.dialogTitle='编辑菜单'
+      this.dialogFormVisible = true
       this.formData.mid = row.mid
+      this.formData.pid = row.pid
       this.formData.type = row.type
       this.formData.title = row.title
       this.formData.path = row.path
@@ -287,7 +289,7 @@ export default {
     },
     // 提交表单
     submitForm(){
-      this.$refs['formData'].validate(async (valid) => {
+      this.$refs.formData.validate(async (valid) => {
         if (valid){
           if (this.formData.cache){
             this.formData.cache = 1
@@ -330,8 +332,8 @@ export default {
     },
     // 重置表单
     resetForm() {
-      this.$refs['formData'].resetFields();
-      Object.assign(this.$data.formData, this.$options.data().formData)
+      if (this.$refs.formData) this.$refs.formData.resetFields();
+      this.$data.formData = this.$options.data().formData
     }
   }
 }

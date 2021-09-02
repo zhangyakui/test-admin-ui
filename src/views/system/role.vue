@@ -95,7 +95,6 @@
       <el-dialog 
       :title="dialogTitle" 
       :visible.sync="dialogFormVisible"
-      @close="resetForm"
       >
         <el-form size="mini" :model="formData" :rules="rules" ref="formData" label-suffix="：" label-width="92px">
           <el-form-item label="角色类型" prop="type">
@@ -105,7 +104,7 @@
               </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="上级节点" prop="optionValue" v-if="formData.type == 1">
+          <el-form-item label="所属部门" prop="optionValue" v-if="formData.type == 1">
             <el-cascader
             v-model="formData.optionValue"
             :options="roleOptions"
@@ -114,28 +113,41 @@
           </el-form-item>
 
           <el-form-item label="角色名称" prop="name">
-            <el-input size="mini" placeholder="请输入角色名称" v-model="formData.name"></el-input>
+            <el-input size="mini" placeholder="请输入 部门/角色 名称" v-model="formData.name"></el-input>
           </el-form-item>
 
-          <el-form-item label="权限选择" prop="name" v-if="formData.type == 1">
-            <!-- <el-input size="mini" placeholder="输入关键字进行过滤" v-model="filterText"
-            >
-            </el-input> -->
-
+          <el-form-item label="分配权限" prop="mlist" v-if="formData.type == 1">
             <el-tree
-            class="filter-tree"
             show-checkbox
-            :data="data"
-            :filter-node-method="filterNode"
-            ref="tree">
+            :data="treeList"
+            node-key='id'
+            ref="tree"
+            @check="clickTree"
+            :default-expanded-keys="checkedList"
+            :default-checked-keys="checkedList"
+            >
             </el-tree>
           </el-form-item>
 
+          <el-form-item label="描述内容" prop="desc">
+            <el-input
+            type="textarea"
+            maxlength="100"
+            show-word-limit
+            placeholder="请输入描述内容"
+            v-model="formData.desc"
+            >
+            </el-input>
+          </el-form-item>
 
-
-          type: {{formData.type}}
+          <!-- type: {{formData.type}}
+          pid: {{formData.pid}}
           name: {{formData.name}}
+          mlist: {{formData.mlist}}
+          desc: {{formData.desc}}
           optionValue: {{formData.optionValue}}
+          checkedList: {{checkedList}}
+          fatherList: {{fatherList}} -->
 
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -154,59 +166,22 @@ export default {
       dataList: [],// 数据
       dialogFormVisible: false,// dialog对话框
       dialogTitle: '',// dialog对话框标题
+      treeList: [],
+      checkedList: [],
+      fatherList: [],
       formData: {// body参数
         rid: 0,
         pid: 0,
         type: 0,
         name: null,
+        mlist: [],
         desc: null,
-        mlist: null,
         optionValue: []
       },
-      filterText: '',
       rules: {
         name: [{ required: true, message: '请输入角色名称', trigger: ['blur', 'change'] }],
         optionValue: [{ required: true, message: '请选择部门', trigger: ['blur', 'change'] }]
       },
-
-
-      data: [{
-          id: 1,
-          label: '一级 1',
-          children: [{
-            id: 4,
-            label: '二级 1-1',
-            children: [{
-              id: 9,
-              label: '三级 1-1-1'
-            }, {
-              id: 10,
-              label: '三级 1-1-2'
-            }]
-          }]
-        }, {
-          id: 2,
-          label: '一级 2',
-          children: [{
-            id: 5,
-            label: '二级 2-1'
-          }, {
-            id: 6,
-            label: '二级 2-2'
-          }]
-        }, {
-          id: 3,
-          label: '一级 3',
-          children: [{
-            id: 7,
-            label: '二级 3-1'
-          }, {
-            id: 8,
-            label: '二级 3-2'
-          }]
-        }],
-
-
     }
   },
   async created(){
@@ -233,82 +208,153 @@ export default {
       this.dataList = rsp.data.data
       return true
     },
+    // 获取权限节点数据
+    async getPermNode(){
+      const rsp = await this.$api.getMenuList()
+      if (!rsp) return false
+      let treeData = []
+      let fatherList = []
+      rsp.data.data.forEach(list => {
+        let listObj = {
+          id: list.mid,
+          label: list.title,
+          perms: [list.mid],
+          children: []
+        }
+        fatherList.push(list.mid)
+        list.children.forEach(menu => {
+          let menuObj = {
+            id: menu.mid,
+            label: menu.title,
+            perms: [menu.pid, menu.mid],
+            children: []
+          }
+          fatherList.push(menu.mid)
+
+          menu.children.forEach(button => {
+            menuObj.children.push({
+              id: button.mid,
+              label: button.title,
+              perms: [list.mid, button.pid, button.mid]
+            })
+          })
+          listObj.children.push(menuObj)
+        })
+        treeData.push(listObj)
+      })
+      this.treeList = treeData
+      this.fatherList = fatherList
+      return true
+    },
+    // 获取当前权限数据
+    async getPermData(){
+      if (this.formData.type == 1){
+        const rsp = await this.$api.getRoleList('perm', this.formData.rid)
+        if (!rsp) return false
+        this.formData.mlist = rsp.data.data
+        this.checkedList = rsp.data.data
+
+        let _checkedList = []
+        this.checkedList.forEach(num => {// 过滤 父级id  防止全选
+          if (this.fatherList.indexOf(num) == -1){
+            _checkedList.push(num)
+          }
+        })
+
+        this.checkedList = _checkedList
+      }
+      return true
+    },
+    // 选择tree
+    clickTree(){
+      let perms = []
+      this.$refs.tree.getCheckedNodes().forEach(perm => {
+        perms.push.apply(perms,perm.perms);
+      })
+      this.formData.mlist = Array.from(new Set(perms))
+
+    },
     // 刷新数据
     async refresh(){
       if (await this.getRoleData()) this.$message.success('刷新成功!')
     },
     // 添加数据
     addData(){
-      this.dialogFormVisible = true
+      this.resetForm()
+      this.getPermNode()
       this.dialogTitle='添加角色'
+      this.dialogFormVisible = true
     },
     // 编辑数据
     editData(row){
-      this.dialogFormVisible = true
-      this.dialogTitle='编辑角色'
-      console.log(row)
+      this.resetForm()
+      this.getPermNode()
       this.formData.rid = row.rid
       this.formData.pid = row.pid
       this.formData.type = row.type
       this.formData.name = row.name
       this.formData.desc = row.desc
-      this.formData.optionValue = row.pid
+      this.formData.optionValue = [row.pid]
+      this.getPermData()
+
+      this.dialogTitle='编辑角色'
+      this.dialogFormVisible = true
+
+
     },
     // 删除数据
     async deleteData(row){
-      console.log('删除数据: ', row.mid)
       let result = await this.$confirm('此操作将永久删除当前数据, 是否继续?', '删除提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
       });
       if (result){
-        const {data} = await this.$api.deleteRole(row.rid)
-        if (data.code == 404){
-          this.$message.error(data.msg)
+        const rsp = await this.$api.deleteRole(row.rid)
+        if (!rsp) return
+        if (rsp.data.code == 404){
+          this.$message.error(rsp.data.msg)
+          return
+        }else if (rsp.data.code == 201){
+          this.$message.warning(rsp.data.msg)
           return
         }
 
-        this.getData()
-        this.$message.success(data.msg)
+        this.getRoleData()
+        this.$message.success(rsp.data.msg)
       }
     },
     // 提交表单
     submitForm(){
-      this.$refs['formData'].validate(async (valid) => {
+      this.$refs.formData.validate(async (valid) => {
         if (valid){
-          if (this.formData.cache){
-            this.formData.cache = 1
-          }else{
-            this.formData.cache = 0
-          }
-          if (this.formData.optionValue.length != 0){
-            this.formData.pid = this.formData.optionValue[this.formData.optionValue.length - 1]
-          }
+            if (this.formData.type == 1){
+              this.formData.pid = this.formData.optionValue[0]
+              if (this.formData.mlist.length == 0){
+                this.$message.warning('您未分配权限!')
+                return
+              }
+              this.formData.mlist = JSON.stringify(this.formData.mlist)
+            }
           if (this.dialogTitle == '添加角色'){
-            const {data} = await this.$api.addrole(this.formData)
-            if (data.code == 404){// 节点不存在
-              this.$message.error(data.msg)
-              return
-            }else if (data.code == 201){// 角色已存在
-              this.$message.warning(data.msg)
+            const rsp = await this.$api.addRole(this.formData)
+            if (!rsp) return
+            if (rsp.data.code == 201){// 角色已存在
+              this.$message.error(rsp.data.msg)
               return
             }
-
-            this.getData()
-            this.$message.success(data.msg)
+            if (await this.getRoleData()) this.$message.success(rsp.data.msg)
+            
           }else if(this.dialogTitle == '编辑角色'){
-            console.log('编辑角色')
-            const {data} = await this.$api.editrole(this.formData)
-            if (data.code == 404){// 节点不存在
-              this.$message.error(data.msg)
+            const rsp = await this.$api.editRole(this.formData)
+            if (rsp.data.code == 404){// 节点不存在
+              this.$message.error(rsp.data.msg)
               return
-            }else if (data.code == 201){// 角色已存在
-              this.$message.warning(data.msg)
+            }else if (rsp.data.code == 201){// 角色已存在
+              this.$message.warning(rsp.data.msg)
               return
             }
-            this.getData()
-            this.$message.success(data.msg)
+            if (await this.getRoleData()) this.$message.success(rsp.data.msg)
           }
 
           this.dialogFormVisible = false
@@ -317,8 +363,9 @@ export default {
     },
     // 重置表单
     resetForm() {
-      this.$refs['formData'].resetFields();
-      Object.assign(this.$data.formData, this.$options.data().formData)
+      if (this.$refs.formData) this.$refs.formData.resetFields()
+      this.$data.formData = this.$options.data().formData
+      this.$data.checkedList = this.$options.data().checkedList
     }
   }
 }
@@ -334,10 +381,10 @@ export default {
 } 
 
 .el-tree{
-  /* margin-top: 8px; */
   height: 250px;
   overflow-y: scroll;
   background-color: rgba(144, 147, 147, .1);
+  /* padding: 8px; */
 }
 
 </style>

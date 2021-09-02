@@ -79,6 +79,7 @@
         <!-- 快捷方式 -->
         <div class="quick">
           <el-tag size="small" @click="$store.commit('clearQuickList'); $router.push('/')">首页</el-tag>
+
           <el-tag 
           v-for="(item, index) in $store.getters.getQuickList" 
           :key="index" 

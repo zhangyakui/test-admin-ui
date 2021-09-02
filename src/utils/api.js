@@ -50,16 +50,38 @@ export default {
     },
     // ---------------------------------------------- 角色api ----------------------------------------------
     // 角色列表 role/perm
-    async getRoleList(type){
-        return await http.get('/system/role/list', {params: {type: type}})
+    async getRoleList(type, rid=null){
+        if (type == 'role'){
+            return await http.get('/system/role/list', {params: {type: type}})
+        }else if (type == 'perm'){
+            return await http.get('/system/role/list', {params: {type: type, rid: rid}})
+        }
     },
     // 添加角色
     async addRole(data){
-        let body = URLSearchParams()
+        let body = new URLSearchParams()
         body.append('rid', data.rid)
+        body.append('pid', data.pid)
         body.append('type', data.type)
         body.append('name', data.name)
+        body.append('mlist', data.mlist)
         body.append('desc', data.desc)
         return await http.post('/system/role/add', body)
+    },
+    // 修改角色
+    async editRole(data){
+        let body = new URLSearchParams()
+        body.append('rid', data.rid)
+        body.append('pid', data.pid)
+        body.append('name', data.name)
+        body.append('mlist', data.mlist)
+        body.append('desc', data.desc)
+        return await http.post('/system/role/edit', body)
+    },
+    // 删除角色
+    async deleteRole(rid){
+        let body = new URLSearchParams()
+        body.append('rid', rid)
+        return await http.post('/system/role/delete', body)
     }
 }
