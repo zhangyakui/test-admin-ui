@@ -33,15 +33,21 @@
       highlight-current-row
       >
         <el-table-column
+        type="index"
+        min-width="50px">
+        </el-table-column>
+
+        <el-table-column
         prop="title"
         label="名称"
-        min-width="100px"
+        min-width="120px"
         >
         </el-table-column>
         
         <el-table-column
         prop="type"
         label="类型"
+        min-width="50px"
         >
           <template slot-scope="scope">
             <el-tag size="mini" type="warning" v-if="scope.row.type == 0">目录</el-tag>
@@ -53,6 +59,7 @@
         <el-table-column
         prop="path"
         label="路由"
+        min-width="100px"
         show-overflow-tooltip
         >
         </el-table-column>
@@ -60,6 +67,7 @@
         <el-table-column
         prop="permission"
         label="权限标识"
+        min-width="150px"
         show-overflow-tooltip
         >
         </el-table-column>
@@ -67,30 +75,32 @@
         <el-table-column
         prop="cache"
         label="缓存"
+        min-width="50px"
         >
           <template slot-scope="scope">
-            <span v-if="scope.row.cache">是</span>
-            <span v-else>否</span>
+            <span v-if="scope.row.cache == 1">是</span>
+            <span v-else-if="scope.row.cache == 0">否</span>
           </template>
         </el-table-column>
 
         <el-table-column
         prop="sortId"
         label="排序"
+        min-width="50px"
         >
         </el-table-column>
         
         <el-table-column
         prop="createTime"
         label="创建日期"
-        width="150"
+        min-width="150px"
         >
         </el-table-column>
 
         <el-table-column
         fixed="right"
         label="操作"
-        width="120"
+        min-width="100px"
         >
           <template slot-scope="scope">
             <el-button
@@ -151,8 +161,9 @@
           <el-form-item label="缓存页面" prop="cache" v-if="formData.type == 1">
             <el-switch
             v-model="formData.cache"
-            active-color="#13ce66"
-            inactive-color="#ff4949">
+            :active-value=1
+            :inactive-value=0
+            >
             </el-switch>
           </el-form-item>
 
@@ -160,8 +171,8 @@
             <el-input-number size="mini" controls-position="right" v-model="formData.sortId"></el-input-number>
           </el-form-item>
 
-<!--       
-          菜单类型:{{formData.type}}
+      
+          <!-- 菜单类型:{{formData.type}}
           标题: {{formData.title}}
           路由: {{formData.path}}
           权限标识: {{formData.permission}}
@@ -192,7 +203,7 @@ export default {
         type: 0,
         title: null,
         path: null,
-        cache: true,
+        cache: 1,
         permission: null,
         sortId: 0,
         optionValue: [],
@@ -205,8 +216,8 @@ export default {
       },
     }
   },
-  async created(){
-    if (await this.getData()) this.$message.success('刷新成功!')
+  created(){
+    this.getData()
   },
   computed: {
     // 动态生成 菜单节点
@@ -221,10 +232,10 @@ export default {
           _menuObj.children = []
           category.children.forEach(menu => {
             _menuObj.children.push({
-            value: menu.mid,
-            label: menu.title
+              value: menu.mid,
+              label: menu.title
+            })
           })
-        })
         }
         options.push(_menuObj)
       })   
@@ -241,7 +252,7 @@ export default {
     },
     // 刷新数据
     async refresh(){
-      if (await this.getData()) this.$message.success('刷新成功!')
+      if (await this.getData()) this.$message.success('刷新成功')
     },
     // 添加数据
     addData(){
@@ -291,11 +302,6 @@ export default {
     submitForm(){
       this.$refs.formData.validate(async (valid) => {
         if (valid){
-          if (this.formData.cache){
-            this.formData.cache = 1
-          }else{
-            this.formData.cache = 0
-          }
           if (this.formData.optionValue.length != 0){
             this.formData.pid = this.formData.optionValue[this.formData.optionValue.length - 1]
           }

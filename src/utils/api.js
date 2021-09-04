@@ -24,9 +24,9 @@ export default {
         body.append('type', data.type)
         body.append('title', data.title)
         body.append('sortId', data.sortId)
-        body.append('path', data.path)
-        body.append('cache', data.cache)
-        body.append('permission', data.permission)
+        if (data.type != 0) body.append('path', data.path)
+        if (data.type == 1) body.append('cache', data.cache)
+        if (data.type != 0) body.append('permission', data.permission)
         return await http.post('/system/menu/add', body)
     },
     // 修改菜单
@@ -37,9 +37,9 @@ export default {
         body.append('type', data.type)
         body.append('title', data.title)
         body.append('sortId', data.sortId)
-        body.append('path', data.path)
-        body.append('cache', data.cache)
-        body.append('permission', data.permission)
+        if (data.type != 0) body.append('path', data.path)
+        if (data.type == 1) body.append('cache', data.cache)
+        if (data.type != 0) body.append('permission', data.permission)
         return await http.post('/system/menu/edit', body)
     },
     // 删除菜单
@@ -83,5 +83,79 @@ export default {
         let body = new URLSearchParams()
         body.append('rid', rid)
         return await http.post('/system/role/delete', body)
-    }
+    },
+    // ---------------------------------------------- 用户api ----------------------------------------------
+    // 用户列表
+    async getUserList(query){
+        return await http.get('/system/user/list', {params: query})
+    },
+    // 添加用户
+    async addUser(data){
+        let body = new URLSearchParams()
+        body.append('account', data.account)
+        body.append('password', data.password)
+        body.append('username', data.username)
+        body.append('gender', data.gender)
+        body.append('phone', data.phone)
+        body.append('enable', data.enable)
+        body.append('rid', data.rid)
+        body.append('desc', data.desc)
+        return await http.post('/system/user/add', body)
+    },
+    // 修改用户
+    async editUser(data){
+        let body = new URLSearchParams()
+        body.append('uid', data.uid)
+        if (data.phone) body.append('phone', data.phone)
+        if (data.enable != undefined) body.append('enable', data.enable)
+        if (data.rid) body.append('rid', data.rid)
+        if (data.desc) body.append('desc', data.desc)
+        return await http.post('/system/user/edit', body)
+    },
+    // 删除用户
+    async deleteUser(uid){
+        let body = new URLSearchParams()
+        body.append('uid', uid)
+        return await http.post('/system/user/delete', body)
+    },
+    // 下载用户表格
+    async downloadUser(){
+        return await http.get('/system/user/excel')
+    },
+    // ---------------------------------------------- 日志api ----------------------------------------------
+    // 日志列表
+    async getLogList(query){
+        return await http.get('/system/log/list', {params: query})
+    },
+    // 下载表格
+    async downloadLog(){
+        return await http.get('/system/log/excel')
+    },
+    // 清空日志
+    async clearLog(){
+        return await http.post('/system/log/delete')
+    },
+    // ---------------------------------------------- 平台账号 api ----------------------------------------------
+    
+
+
+
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+    // ---------------------------------------------- XXXX api ----------------------------------------------
+
 }

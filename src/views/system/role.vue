@@ -7,7 +7,7 @@
       type="primary" 
       size="mini" 
       @click="addData"
-      v-if="$tool.isPerm('system:role:add')"
+      v-if="$tool.isPerm('system:role:add') && $tool.isPerm('system:menu:list')"
       > 添加
       </el-button>
 
@@ -33,6 +33,11 @@
       highlight-current-row
       >
         <el-table-column
+        type="index"
+        min-width="50px">
+        </el-table-column>
+
+        <el-table-column
         prop="name"
         label="名称"
         min-width="100px"
@@ -42,6 +47,7 @@
         <el-table-column
         prop="type"
         label="类型"
+        min-width="50px"
         >
           <template slot-scope="scope">
             <el-tag size="mini" type="warning" v-if="scope.row.type == 0">部门</el-tag>
@@ -53,21 +59,22 @@
         <el-table-column
         prop="desc"
         label="描述"
-        min-width="100px"
+        min-width="150px"
+        show-overflow-tooltip
         >
         </el-table-column>
        
         <el-table-column
         prop="createTime"
         label="创建日期"
-        width="150"
+        min-width="150px"
         >
         </el-table-column>
 
         <el-table-column
         fixed="right"
         label="操作"
-        width="120"
+        min-width="100px"
         >
           <template slot-scope="scope">
             <el-button
@@ -127,6 +134,13 @@
             :default-checked-keys="checkedList"
             >
             </el-tree>
+            <el-alert
+            title="tips: 用户添加按钮(用户新增+角色新增) 角色添加按钮(角色新增+菜单新增)"
+            type="warning"
+            show-icon
+            :closable="false"
+            >
+          </el-alert>
           </el-form-item>
 
           <el-form-item label="描述内容" prop="desc">
@@ -184,8 +198,8 @@ export default {
       },
     }
   },
-  async created(){
-    if (await this.getRoleData()) this.$message.success('刷新成功!')
+  created(){
+    this.getRoleData()
   },
   computed: {
     // 动态生成 角色节点
@@ -276,19 +290,19 @@ export default {
     },
     // 刷新数据
     async refresh(){
-      if (await this.getRoleData()) this.$message.success('刷新成功!')
+      if (await this.getRoleData()) this.$message.success('刷新成功')
     },
     // 添加数据
-    addData(){
+    async addData(){
       this.resetForm()
-      this.getPermNode()
+      if (!await this.getPermNode()) return
       this.dialogTitle='添加角色'
       this.dialogFormVisible = true
     },
     // 编辑数据
-    editData(row){
+    async editData(row){
       this.resetForm()
-      this.getPermNode()
+      if (!await this.getPermNode()) return
       this.formData.rid = row.rid
       this.formData.pid = row.pid
       this.formData.type = row.type
@@ -331,7 +345,7 @@ export default {
             if (this.formData.type == 1){
               this.formData.pid = this.formData.optionValue[0]
               if (this.formData.mlist.length == 0){
-                this.$message.warning('您未分配权限!')
+                this.$message.warning('您未分配权限')
                 return
               }
               this.formData.mlist = JSON.stringify(this.formData.mlist)
@@ -385,6 +399,10 @@ export default {
   overflow-y: scroll;
   background-color: rgba(144, 147, 147, .1);
   /* padding: 8px; */
+}
+
+.el-alert{
+  line-height: 10px !important;
 }
 
 </style>

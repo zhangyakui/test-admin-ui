@@ -24,7 +24,7 @@
               <el-button type="primary" size="small" @click="login">登录</el-button>
             </el-form-item>
            </el-form>
-           <p> 测试用户: 15615545@qq.com 密码: test1234</p>
+           <p> 测试用户: test1 密码: pwd123456</p>
         </div>
         
       </div>

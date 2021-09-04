@@ -62,6 +62,12 @@ let mainPage =  {
             meta: {},
             component: () => import('../views/system/menu.vue')
         },
+        {
+            path: '/system/log',
+            name: 'log',
+            meta: {},
+            component: () => import('../views/system/log.vue')
+        },
         // 账号管理
         {
             path: '/account/qq',

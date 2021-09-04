@@ -66,6 +66,7 @@
               <span class="el-dropdown-link">
                 {{userInfo.username}}
                 <el-tag v-if="userInfo.isAdmin" type="warning" size="mini">超管</el-tag>
+                <el-tag v-else type="info" size="mini">{{roleInfo.name}}</el-tag>
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
 
@@ -117,6 +118,7 @@ export default {
   data(){
     return {
       userInfo: this.$store.getters.getUserInfo,
+      roleInfo: this.$store.getters.getRoleInfo,
       menuInfo: this.$store.getters.getMenuInfo,
       isClose: false,// 侧边栏是否关闭
       quickColor: '',// 快捷按钮 类

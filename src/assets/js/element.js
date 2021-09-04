@@ -34,7 +34,10 @@ import {
     Switch,
     MessageBox,
     Tree,
-    Tooltip
+    Tooltip,
+    Pagination,
+    Alert,
+    Image
     
 
 
@@ -79,6 +82,9 @@ Vue.use(Cascader);
 Vue.use(Switch);
 Vue.use(Tree);
 Vue.use(Tooltip);
+Vue.use(Pagination);
+Vue.use(Alert);
+Vue.use(Image);
 
 
 // 提示类组件需挂载
