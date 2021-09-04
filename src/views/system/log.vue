@@ -26,7 +26,7 @@
         </div>
         <div class="user-operation-right">
             <el-button 
-            class="margin-right button el-icon-refresh-right" 
+            class="margin-right button el-icon-delete" 
             type="danger" 
             size="mini" 
             @click="clearAll"
@@ -123,7 +123,7 @@
       <el-pagination
       @current-change="getData()"
       :current-page.sync="formData.page"
-      :page-size="10"
+      :page-size="formData.size"
       layout="total, prev, pager, next"
       :total="total">
       </el-pagination>
