@@ -5,9 +5,9 @@
         <span v-if="!$store.getters.getUserInfo.isAdmin">
           您当前处于 
           部门：
-          <el-link type="warning">[{{deptInfo.name}}]</el-link>
+          <el-link type="warning">[{{deptInfo.title}}]</el-link>
           职位：
-          <el-link type="success">[{{roleInfo.name}}]</el-link>
+          <el-link type="success">[{{roleInfo.title}}]</el-link>
         </span>
       </div>
 

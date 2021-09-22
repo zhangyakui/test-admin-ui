@@ -17,13 +17,13 @@ export default {
 }
 
 p{
-  font-size: 300px;
+  font-size: 200px;
   text-align: center;
   margin-top: 150px;
 }
 
 .el-button{
-  font-size: 18px;
+  font-size: 14px;
   background-color: #2c3e50;
   color: #FFFFFF;
 }

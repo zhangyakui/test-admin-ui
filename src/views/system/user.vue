@@ -3,21 +3,23 @@
     <!-- 顶部操作 增 删 -->
     <div class="user-operation">
       <div class="user-operation-left">
-        <!-- <el-select 联动问题, 暂不使用过滤功能
+        <el-select
         v-if="$tool.isPerm('system:user:list')"
-        v-model="formData.enable" 
-        placeholder="状态选择" 
+        v-model="enable" 
+        placeholder="状态" 
+        @change="filterData"
         size="mini" 
         class="margin-right" 
         style="width: 100px" 
-        clearable>
+        clearable
+        >
           <el-option
-          v-for="item in [{value: 1, label: '启用'}, {value: 0, label: '停用'}]"
+          v-for="item in [{label: '禁用', value: 0}, {label: '启用', value: 1}]"
           :key="item.value"
           :label="item.label"
           :value="item.value">
           </el-option>
-        </el-select> -->
+        </el-select>
 
         <el-input 
         v-if="$tool.isPerm('system:user:list')"
@@ -26,9 +28,10 @@
         class="input-with-select margin-right" 
         size="mini" 
         style="width: 200px"
+        @change="search"
         clearable
         >
-          <el-button slot="append" icon="el-icon-search" class="button" @click="search">搜索</el-button>
+          <el-button slot="append" icon="el-icon-search" class="button">搜索</el-button>
         </el-input>
 
         <el-button 
@@ -74,11 +77,13 @@
       >
         <el-table-column
         type="index"
-        min-width="50px">
+        label="#"
+        min-width="50px"
+        >
         </el-table-column>
 
         <el-table-column
-        prop="deptName"
+        prop="deptTitle"
         label="部门"
         min-width="80px"
         show-overflow-tooltip
@@ -86,7 +91,7 @@
         </el-table-column>
 
         <el-table-column
-        prop="jobName"
+        prop="jobTitle"
         label="职位"
         min-width="80px"
         show-overflow-tooltip
@@ -102,7 +107,7 @@
         </el-table-column>
 
         <el-table-column
-        prop="username"
+        prop="userName"
         label="姓名"
         min-width="100px"
         show-overflow-tooltip
@@ -162,18 +167,20 @@
         <el-table-column
         fixed="right"
         label="操作"
-        min-width="100px"
+        min-width="120px"
         >
           <template slot-scope="scope">
             <el-button
+            icon="el-icon-edit"
             type="text"
             size="small"
             @click="editData(scope.row)"
-            v-if="$tool.isPerm('system:user:edit')"
+            v-if="$tool.isPerm('system:user:edit') && $tool.isPerm('system:role:list')"
             >编辑
             </el-button>
 
             <el-button
+            icon="el-icon-delete"
             type="text"
             size="small"
             @click="deleteData(scope.row)"
@@ -196,6 +203,8 @@
     <!-- 弹框 -->
     <div class="user-from">
       <el-dialog 
+      width="650px"
+      style="text-align: left;"
       :title="dialogTitle" 
       :visible.sync="dialogFormVisible"
       >
@@ -208,8 +217,8 @@
             <el-input size="mini" placeholder="请输入密码(默认为: admin1234)" v-model="formData.password"></el-input>
           </el-form-item>
          
-          <el-form-item label="真实姓名" prop="username">
-            <el-input size="mini" placeholder="请输入用户真实姓名" v-model="formData.username" :disabled="dialogTitle == '编辑用户'"></el-input>
+          <el-form-item label="真实姓名" prop="userName">
+            <el-input size="mini" placeholder="请输入用户真实姓名" v-model="formData.userName" :disabled="dialogTitle == '编辑用户'"></el-input>
           </el-form-item>
 
           <el-form-item label="手机号 " prop="phone">
@@ -250,22 +259,6 @@
             >
             </el-input>
           </el-form-item>
-
-          <!-- uid: {{formData.uid}}
-          username: {{formData.username}}
-          account: {{formData.account}}
-          password: {{formData.password}}
-          gender: {{formData.gender}}
-          phone: {{formData.phone}}
-          enable: {{formData.enable}}
-          desc: {{formData.desc}}
-          page: {{formData.page}}
-          size: {{formData.size}}
-          keyword: {{formData.keyword}}
-          rid: {{formData.rid}}
-          roleOptions: {{roleOptions}}
-          optionValue:{{formData.optionValue}} -->
-
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false; resetForm();" size="small">取 消</el-button>
@@ -285,27 +278,28 @@ export default {
       dialogTitle: '',// dialog对话框标题
       roleOptions: [],// 角色选择
       formData: {// body参数
-        uid: null,
-        username: null,
+        uid: 0,
+        userName: null,
         account: null,
         password: 'pwd123456',
         gender: 1,
         phone: '',
         enable: null,
         desc: '',
-        rid: null,
+        rid: 0,
         page: 1,
         size: 10,
         keyword: '',
         optionValue: [],
-        jobId: null,
-        jobName: null,
-        deptId: null,
-        deptName: null
+        jobId: 0,
+        jobTitle: '',
+        deptId: 0,
+        deptTitle: ''
       },
+      enable: null,
       total: 0,
       rules: {
-        username: [{ required: true, message: '请输入用户真实姓名', trigger: ['blur', 'change'] }],
+        userName: [{ required: true, message: '请输入用户真实姓名', trigger: ['blur', 'change'] }],
         account: [{ required: true, message: '请输入账号(最好是Email)', trigger: ['blur', 'change'] }],
         password: [{ required: true, message: '请输入密码(默认为: admin1234)', trigger: ['blur', 'change'] }],
         optionValue: [{ required: true, message: '请选择职位', trigger: ['blur', 'change'] }]
@@ -324,6 +318,13 @@ export default {
       this.total = rsp.data.data.total
       return true
     },
+    // 过滤数据
+    filterData(){
+      this.formData.enable = this.enable
+      this.$data.formData.keyword = this.$options.data().formData.keyword
+      this.formData.page = 1
+      this.getData()
+    },
     // 查询数据
     search(){
       this.formData.page = 1
@@ -331,21 +332,20 @@ export default {
     },
     // 刷新数据
     async refresh(){
-       this.resetForm()
+      this.$data.formData = this.$options.data().formData
       if (await this.getData()) this.$message.success('刷新成功')
     },
     // 下载表格
     async downloadExcel(){
-      console.log('下载表格')
       const rsp = await this.$api.downloadUser()
-      if (!rsp) return console.log('err')
+      if (!rsp) return
       let dataList = []
       rsp.data.data.list.forEach(data => {
         let obj = {
-          deptName: data.deptName,
-          jobName: data.jobName,
+          deptTitle: data.deptTitle,
+          jobTitle: data.jobTitle,
           account: data.account,
-          username: data.username,
+          userName: data.userName,
           gender: data.gender == 1 ? '男' : '女',
           phone: data.phone,
           desc: data.desc,
@@ -365,13 +365,13 @@ export default {
       rsp.data.data.forEach(dept => {
         let deptObj = {
           value: dept.rid,
-          label: dept.name,
+          label: dept.title,
           children: []
         }
         dept.children.forEach(job => {
           deptObj.children.push({
             value: job.rid,
-            label: job.name
+            label: job.title
           })
         })
         this.roleOptions.push(deptObj)
@@ -392,7 +392,7 @@ export default {
       if (!await this.getRoleList()) return
       this.formData.uid = row.uid
       this.formData.account = row.account
-      this.formData.username = row.username
+      this.formData.userName = row.userName
       this.formData.phone = row.phone
       this.formData.enable = row.enable
       this.formData.optionValue = [row.deptId, row.jobId]
@@ -446,6 +446,7 @@ export default {
             this.formData.rid = this.formData.optionValue[this.formData.optionValue.length - 1]
           }
           if (this.dialogTitle == '添加用户'){
+            console.log(this.formData)
             const rsp = await this.$api.addUser(this.formData)
             if (!rsp) return
             if (rsp.data.code == 201){// 用户已存在
@@ -475,7 +476,19 @@ export default {
     // 重置表单
     resetForm() {
       if (this.$refs.formData) this.$refs.formData.resetFields()
-      this.$data.formData = this.$options.data().formData
+      this.$data.formData.userName = this.$options.data().formData.userName
+      this.$data.formData.account = this.$options.data().formData.account
+      this.$data.formData.password = this.$options.data().formData.password
+      this.$data.formData.gender = this.$options.data().formData.gender
+      this.$data.formData.phone = this.$options.data().formData.phone
+      this.$data.formData.enable = this.$options.data().formData.enable
+      this.$data.formData.desc = this.$options.data().formData.desc
+      this.$data.formData.rid = this.$options.data().formData.rid
+      this.$data.formData.optionValue = this.$options.data().formData.optionValue
+      this.$data.formData.jobId = this.$options.data().formData.jobId
+      this.$data.formData.jobTitle = this.$options.data().formData.jobTitle
+      this.$data.formData.deptId = this.$options.data().formData.deptId
+      this.$data.formData.deptTitle = this.$options.data().formData.deptTitle
     }
   }
 }

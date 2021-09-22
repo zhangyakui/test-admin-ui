@@ -5,6 +5,7 @@ import {Message} from 'element-ui';
 
 // baseUrl
 axios.defaults.baseURL = 'http://192.168.0.119:7002'
+// axios.defaults.baseURL = '/api/'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
 
 // 请求拦截
@@ -22,7 +23,6 @@ axios.interceptors.request.use(request => {
     window.localStorage.clear()// 清空
     router.push('/login')
     Message.error('token不存在, 请重新登录!')
-
 }, () => {
     Message.error('服务端请求异常!')
 });
@@ -32,7 +32,7 @@ axios.interceptors.response.use(response => {
     if (response.data.code == 400){
         Message.error('参数错误!')
     }else if (response.data.code == 401){
-        window.localStorage.clear()// 清空        
+        window.localStorage.clear()// 清空
         router.push('/login')
         Message.error('登录已过期, 请重新登录!')
     }else if (response.data.code == 403){

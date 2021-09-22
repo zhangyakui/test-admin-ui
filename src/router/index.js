@@ -40,64 +40,89 @@ let mainPage =  {
         {
             path: '/wellcome',
             name: 'wellcome',
-            meta: {},
+            meta: {keepAlive: true},
             component: () => import('../views/Wellcome.vue')
         },
         // 系统管理
         {
             path: '/system/user',
             name: 'user',
-            meta: {},
+            meta: {keepAlive: true},
             component: () => import('../views/system/user.vue')
         },
         {
             path: '/system/role',
             name: 'role',
-            meta: {},
+            meta: {keepAlive: true},
             component: () => import('../views/system/role.vue')
         },
         {
             path: '/system/menu',
             name: 'menu',
-            meta: {},
+            meta: {keepAlive: true},
             component: () => import('../views/system/menu.vue')
         },
         {
             path: '/system/log',
             name: 'log',
-            meta: {},
+            meta: {keepAlive: false},
             component: () => import('../views/system/log.vue')
         },
         // 账号管理
         {
+            path: '/assets/phone',
+            name: 'mobPhone',
+            meta: {keepAlive: true},
+            component: () => import('../views/assets/phone.vue')
+        },
+        // 账号管理
+        {
+            path: '/account/phone',
+            name: 'phone',
+            meta: {keepAlive: true},
+            component: () => import('../views/account/phone.vue')
+        },
+        {
             path: '/account/qq',
             name: 'qq',
-            meta: {},
+            meta: {keepAlive: true},
             component: () => import('../views/account/qq.vue')
         },
         {
             path: '/account/weixin',
             name: 'weixin',
-            meta: {},
+            meta: {keepAlive: true},
             component: () => import('../views/account/weixin.vue')
+        },
+        {
+            path: '/account/qiehao',
+            name: 'qiehao',
+            meta: {keepAlive: true},
+            component: () => import('../views/account/qiehao.vue')
+        },
+        {
+            path: '/account/zhihu',
+            name: 'zhihu',
+            meta: {keepAlive: true},
+            component: () => import('../views/account/zhihu.vue')
         },
         // 文件管理
         {
             path: '/file/office',
             name: 'office',
-            meta: {},
+            meta: {keepAlive: true},
             component: () => import('../views/file/office.vue')
         },
         {
             path: '/file/script',
             name: 'script',
-            meta: {},
+            meta: {keepAlive: true},
             component: () => import('../views/file/script.vue')
         },
         {
             path: '/file/app',
             name: 'app',
-            meta: {},
+            meta: {keepAlive: true},
             component: () => import('../views/file/app.vue')
         }
     ]
@@ -132,15 +157,14 @@ router.beforeEach((to, from, next) => {
         }
         
         // 路由追加 meta内容
-        store.getters.getMenuInfo.menus.forEach(category => {
-            category.children.forEach(menu => {
-                if (to.path == menu.path){
-                    to.meta.icon = menu.meta.icon
-                    to.meta.title = menu.meta.title
-                    to.meta.cache = menu.meta.cache
-                }
-            })
-        })
+        // store.getters.getMenuInfo.menus.forEach(category => {
+        //     category.children.forEach(menu => {
+        //         if (to.path == menu.path){
+        //             to.meta.title = menu.meta.title
+        //             to.meta.keepAlive = menu.meta.keepAlive
+        //         }
+        //     })
+        // })
     }else{// 不存在
         if (to.path != '/login') return next('/login')
     }

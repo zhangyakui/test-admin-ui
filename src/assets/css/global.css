@@ -12,9 +12,9 @@ body, html, #app {
     color: #2c3e50;
     height: 100%;
     width: 100%;
-    min-width: 960px;
-    min-height: 720px;
-    overflow-y: hidden;
+    min-width: 800px;
+    /* min-height: 960px; */
+    /* overflow-y: hidden; */
 }
 /*滚动条样式*/
 ::-webkit-scrollbar {/*滚动条整体样式*/
@@ -75,12 +75,39 @@ body .el-table colgroup.gutter{
     height: 100% !important;
 }
 
-.el-dialog{
-    width: 650px !important;
-    text-align: left;
-}
-
 .el-pagination{
     margin-top: 8px;
     text-align: left;
 }
+
+/* table 展开行 */
+.demo-table-expand {    
+    font-size: 12px;
+}
+.demo-table-expand label {
+    width: 92px;
+    color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.el-avatar, .el-image{
+    margin-bottom: -7px;
+}
+
+.el-tabs{
+    height: 40px;
+    margin-bottom: 8px;
+}
+
+/* 表格标题, 常用于用户作品标题显示 */
+.table-cell-title{
+    white-space: per-line; 
+    text-overflow: ellipsis; 
+    font-size: 12px !important;
+}
+

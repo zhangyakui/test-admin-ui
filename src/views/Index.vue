@@ -22,16 +22,18 @@
           v-for="(category, index) in menuInfo.menus" :key="index"
           >
             <template slot="title">
-              <!-- <i :class="category.meta.icon"></i> -->
-              <i class="el-icon-eleme"></i>
+              <i class="el-icon-setting" v-if="category.path == '/system'"></i>
+              <i class="el-icon-money" v-else-if="category.path == '/assets'"></i>
+              <i class="el-icon-postcard" v-else-if="category.path == '/account'"></i>
               <span>{{category.meta.title}}</span>
             </template>
             <el-menu-item 
             v-for="(menu, idx) in category.children" :key="idx"
-            :class="menu.meta.icon" 
             :index="menu.path"
             >
-            {{menu.meta.title}}
+              <!-- <i class="el-icon-s-order"></i> -->
+              <span>{{menu.meta.title}}</span>
+            <!-- {{menu.meta.title}} -->
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -64,14 +66,14 @@
             <!-- 用户 -->
             <el-dropdown trigger="click" @command="command">
               <span class="el-dropdown-link">
-                {{userInfo.username}}
+                {{userInfo.userName}}
                 <el-tag v-if="userInfo.isAdmin" type="warning" size="mini">超管</el-tag>
-                <el-tag v-else type="info" size="mini">{{roleInfo.name}}</el-tag>
+                <el-tag v-else type="info" size="mini">{{roleInfo.title}}</el-tag>
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
 
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-switch-button" command="exit">退出</el-dropdown-item>
+                <el-dropdown-item command="exit">退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -97,15 +99,14 @@
 
         <!-- 页面 -->
         <el-main>
-          <!-- 缓存页面 -->
           <transition name="el-zoom-in-top">
-            <keep-alive v-if="$route.meta.cache">
+            <!-- 缓存页面 -->
+            <keep-alive v-if="$route.meta.keepAlive">
               <router-view></router-view>
             </keep-alive>
             <!-- 不缓存 -->
             <router-view v-else></router-view>
           </transition>
-
         </el-main>
       </el-container>
     </el-container>
@@ -136,6 +137,9 @@ export default {
     // 清空快捷路由
     closeQuick(item){
       this.$store.commit('deleteQuickList', item)
+      const quickList = this.$store.getters.getQuickList
+      if (quickList.length != 0) this.$router.push(quickList[quickList.length - 1].path)
+      else this.$router.push('/')
     }
   }
 }
@@ -177,10 +181,6 @@ export default {
     height: 50px;
     line-height: 50px;
     text-align: center;
-  }
-
-  .content{
-   
   }
 
   .el-header{

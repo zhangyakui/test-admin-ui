@@ -17,14 +17,14 @@
             </el-form-item>
 
             <el-form-item label="密码" prop="password">
-              <el-input placeholder="请输入密码" type="password" size="small" clearable v-model="loginForm.password" @keyup.enter.native="login"></el-input>
+              <el-input placeholder="请输入密码" type="password" size="small" clearable show-password v-model="loginForm.password" @keyup.enter.native="login"></el-input>
             </el-form-item>
 
             <el-form-item>
               <el-button type="primary" size="small" @click="login">登录</el-button>
             </el-form-item>
            </el-form>
-           <p> 测试用户: test1 密码: pwd123456</p>
+           <!-- <p> 测试用户: test  1 密码: pwd123456</p> -->
         </div>
         
       </div>

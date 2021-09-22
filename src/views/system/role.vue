@@ -33,12 +33,14 @@
       highlight-current-row
       >
         <el-table-column
+        label="#"
         type="index"
-        min-width="50px">
+        min-width="50px"
+        >
         </el-table-column>
 
         <el-table-column
-        prop="name"
+        prop="title"
         label="名称"
         min-width="100px"
         >
@@ -47,14 +49,13 @@
         <el-table-column
         prop="type"
         label="类型"
-        min-width="50px"
+        min-width="60px"
         >
           <template slot-scope="scope">
             <el-tag size="mini" type="warning" v-if="scope.row.type == 0">部门</el-tag>
             <el-tag size="mini" type="" v-else-if="scope.row.type == 1">职位</el-tag>
           </template>
         </el-table-column>
-
 
         <el-table-column
         prop="desc"
@@ -74,18 +75,20 @@
         <el-table-column
         fixed="right"
         label="操作"
-        min-width="100px"
+        min-width="120px"
         >
           <template slot-scope="scope">
             <el-button
+            icon="el-icon-edit"
             type="text"
             size="small"
             @click="editData(scope.row)"
-            v-if="$tool.isPerm('system:role:edit')"
+            v-if="$tool.isPerm('system:role:edit') && $tool.isPerm('system:menu:list')"
             >编辑
             </el-button>
 
             <el-button
+            icon="el-icon-delete"
             type="text"
             size="small"
             @click="deleteData(scope.row)"
@@ -100,6 +103,8 @@
     <!-- 弹框 -->
     <div class="role-from">
       <el-dialog 
+      width="650px"
+      style="text-align: left;"
       :title="dialogTitle" 
       :visible.sync="dialogFormVisible"
       >
@@ -119,8 +124,8 @@
             </el-cascader>
           </el-form-item>
 
-          <el-form-item label="角色名称" prop="name">
-            <el-input size="mini" placeholder="请输入 部门/角色 名称" v-model="formData.name"></el-input>
+          <el-form-item label="角色名称" prop="title">
+            <el-input size="mini" placeholder="请输入 部门/角色 名称" v-model="formData.title"></el-input>
           </el-form-item>
 
           <el-form-item label="分配权限" prop="mlist" v-if="formData.type == 1">
@@ -153,16 +158,6 @@
             >
             </el-input>
           </el-form-item>
-
-          <!-- type: {{formData.type}}
-          pid: {{formData.pid}}
-          name: {{formData.name}}
-          mlist: {{formData.mlist}}
-          desc: {{formData.desc}}
-          optionValue: {{formData.optionValue}}
-          checkedList: {{checkedList}}
-          fatherList: {{fatherList}} -->
-
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false; resetForm();" size="small">取 消</el-button>
@@ -187,13 +182,13 @@ export default {
         rid: 0,
         pid: 0,
         type: 0,
-        name: null,
+        title: '',
         mlist: [],
-        desc: null,
+        desc: '',
         optionValue: []
       },
       rules: {
-        name: [{ required: true, message: '请输入角色名称', trigger: ['blur', 'change'] }],
+        title: [{ required: true, message: '请输入角色名称', trigger: ['blur', 'change'] }],
         optionValue: [{ required: true, message: '请选择部门', trigger: ['blur', 'change'] }]
       },
     }
@@ -208,7 +203,7 @@ export default {
       this.dataList.forEach(dept => {
         options.push({
           value: dept.rid,
-          label: dept.name,
+          label: dept.title,
         })
       })
       return options
@@ -306,7 +301,7 @@ export default {
       this.formData.rid = row.rid
       this.formData.pid = row.pid
       this.formData.type = row.type
-      this.formData.name = row.name
+      this.formData.title = row.title
       this.formData.desc = row.desc
       this.formData.optionValue = [row.pid]
       this.getPermData()

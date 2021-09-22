@@ -50,7 +50,6 @@ export default new Vuex.Store({
                     break
                 }
             }
-            console.log(JSON.stringify(state.quickList))
         },
         clearQuickList: state => state.quickList = []
     },

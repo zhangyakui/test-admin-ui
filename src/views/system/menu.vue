@@ -33,21 +33,24 @@
       highlight-current-row
       >
         <el-table-column
+        label="#"
         type="index"
-        min-width="50px">
+        min-width="50px"
+        >
         </el-table-column>
 
         <el-table-column
         prop="title"
         label="名称"
-        min-width="120px"
+        min-width="160px"
+        show-overflow-tooltip
         >
         </el-table-column>
         
         <el-table-column
         prop="type"
         label="类型"
-        min-width="50px"
+        min-width="70px"
         >
           <template slot-scope="scope">
             <el-tag size="mini" type="warning" v-if="scope.row.type == 0">目录</el-tag>
@@ -73,17 +76,6 @@
         </el-table-column>
         
         <el-table-column
-        prop="cache"
-        label="缓存"
-        min-width="50px"
-        >
-          <template slot-scope="scope">
-            <span v-if="scope.row.cache == 1">是</span>
-            <span v-else-if="scope.row.cache == 0">否</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column
         prop="sortId"
         label="排序"
         min-width="50px"
@@ -100,10 +92,11 @@
         <el-table-column
         fixed="right"
         label="操作"
-        min-width="100px"
+        min-width="120px"
         >
           <template slot-scope="scope">
             <el-button
+            icon="el-icon-edit"
             type="text"
             size="small"
             @click="editData(scope.row)"
@@ -112,6 +105,7 @@
             </el-button>
 
             <el-button
+            icon="el-icon-delete"
             type="text"
             size="small"
             @click="deleteData(scope.row)"
@@ -126,6 +120,8 @@
     <!-- 弹框 -->
     <div class="menu-from">
       <el-dialog 
+      width="650px"
+      style="text-align: left;"
       :title="dialogTitle" 
       :visible.sync="dialogFormVisible"
       >
@@ -150,7 +146,7 @@
             <el-input size="mini" placeholder="请输入菜单名称(4字最佳)" v-model="formData.title"></el-input>
           </el-form-item>
 
-          <el-form-item label="路由地址" prop="path" v-if="formData.type == 1">
+          <el-form-item label="路由地址" prop="path" v-if="formData.type != 2">
             <el-input size="mini" placeholder="请输入路由地址(如: /system/user)" v-model="formData.path"></el-input>
           </el-form-item>
 
@@ -158,27 +154,9 @@
             <el-input size="mini" placeholder="请输入权限标识(如: system:user:list)" v-model="formData.permission"></el-input>
           </el-form-item>
 
-          <el-form-item label="缓存页面" prop="cache" v-if="formData.type == 1">
-            <el-switch
-            v-model="formData.cache"
-            :active-value=1
-            :inactive-value=0
-            >
-            </el-switch>
-          </el-form-item>
-
           <el-form-item label="菜单排序" prop="sortId">
             <el-input-number size="mini" controls-position="right" v-model="formData.sortId"></el-input-number>
           </el-form-item>
-
-      
-          <!-- 菜单类型:{{formData.type}}
-          标题: {{formData.title}}
-          路由: {{formData.path}}
-          权限标识: {{formData.permission}}
-          缓存: {{formData.cache}}
-          排序: {{formData.sortId}}
-          父级: {{formData.pid}} -->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false; resetForm();" size="small">取 消</el-button>
@@ -201,11 +179,10 @@ export default {
         mid: 0,
         pid: 0,
         type: 0,
-        title: null,
-        path: null,
-        cache: 1,
-        permission: null,
-        sortId: 0,
+        title: '',
+        path: '',
+        permission: '',
+        sortId: 1,
         optionValue: [],
       },
       rules: {
@@ -270,7 +247,6 @@ export default {
       this.formData.type = row.type
       this.formData.title = row.title
       this.formData.path = row.path
-      this.formData.cache = row.cache
       this.formData.permission = row.permission
       this.formData.sortId = row.sortId
       if (row.type == 2){// 节点赋值
@@ -353,5 +329,10 @@ export default {
 .menu-table{
   margin-top: 8px;
 } 
+
+/* .el-dialog{
+    width: 650px !important;
+    text-align: left;
+} */
 
 </style>

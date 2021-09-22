@@ -37,7 +37,11 @@ import {
     Tooltip,
     Pagination,
     Alert,
-    Image
+    Image,
+    Avatar,
+    Popover,
+    Tabs,
+    TabPane,
     
 
 
@@ -85,6 +89,10 @@ Vue.use(Tooltip);
 Vue.use(Pagination);
 Vue.use(Alert);
 Vue.use(Image);
+Vue.use(Avatar);
+Vue.use(Popover);
+Vue.use(Tabs);
+Vue.use(TabPane);
 
 
 // 提示类组件需挂载

@@ -21,8 +21,6 @@ Vue.prototype.$tool = tool;
 Vue.prototype.$csv = csv
 
 
-
-
 // 阻止启动生产消息
 Vue.config.productionTip = false;
 

@@ -10,9 +10,10 @@
             class="input-with-select margin-right" 
             size="mini" 
             style="width: 200px"
+            @change="search"
             clearable
             >
-                <el-button slot="append" icon="el-icon-search" class="button" @click="search">搜索</el-button>
+                <el-button slot="append" icon="el-icon-search" class="button">搜索</el-button>
             </el-input>
 
             <el-button 
@@ -51,13 +52,15 @@
       ref="multipleTable"
       style="width: 100%;"
       size="mini"
-      row-key="rid"
+      row-key="id"
       :tree-props="{children: 'children'}"
       highlight-current-row
       >
         <el-table-column
+        label="#"
         type="index"
-        min-width="50px">
+        min-width="50px"
+        >
         </el-table-column>
 
         <el-table-column
@@ -69,7 +72,7 @@
         </el-table-column>
 
         <el-table-column
-        prop="username"
+        prop="userName"
         label="姓名"
         min-width="100px"
         show-overflow-tooltip
@@ -77,7 +80,7 @@
         </el-table-column>
 
         <el-table-column
-        prop="actionTitle"
+        prop="title"
         label="操作功能"
         min-width="100px"
         show-overflow-tooltip
@@ -182,15 +185,14 @@ export default {
     },
     // 下载表格
     async downloadExcel(){
-      console.log('下载表格')
       const rsp = await this.$api.downloadLog()
-      if (!rsp) return console.log('err')
+      if (!rsp) return
       let dataList = []
       rsp.data.data.list.forEach(data => {
         let obj = {
           account: data.account,
-          username: data.username,
-          actionTitle: data.actionTitle,
+          userName: data.userName,
+          title: data.title,
           url: data.url,
           method: data.method,
           params: data.params,
