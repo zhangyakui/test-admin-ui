@@ -203,6 +203,7 @@
       @current-change="getData"
       :current-page.sync="formData.page"
       :page-size="formData.size"
+      :pager-count="11"
       layout="total, prev, pager, next"
       :total="total">
       </el-pagination>

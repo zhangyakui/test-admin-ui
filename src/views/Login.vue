@@ -1,14 +1,16 @@
 <template>
   <div class="login">
       <div class="login-box">
-        <p class="login-box-title">楠楠传媒 - 后台管理系统</p>
+        <!-- <p class="login-box-title">楠楠传媒 - 后台管理系统</p> -->
+        <img src="../assets/img/nannan-logo.png" style="height: 85px; object-fit: cover;" alt="">
+
         <div class="login-box-form">
            <el-form 
            ref="loginForm" 
            :model="loginForm" 
            :rules="rules" 
            label-position="right" 
-           label-width="64px" 
+           label-width="55px" 
            label-suffix="："
            hide-required-asterisk
            >
@@ -115,7 +117,7 @@ export default {
 }
 
 .login-box-form{
-  margin-top: 30px;
+  margin-top: 10px;
   text-align: center;
 }
 

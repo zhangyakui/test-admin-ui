@@ -24,7 +24,9 @@
             <template slot="title">
               <i class="el-icon-setting" v-if="category.path == '/system'"></i>
               <i class="el-icon-money" v-else-if="category.path == '/assets'"></i>
+              <i class="el-icon-s-check" v-else-if="category.path == '/approve'"></i>
               <i class="el-icon-postcard" v-else-if="category.path == '/account'"></i>
+              <i class="el-icon-message" v-else-if="category.path == '/email'"></i>
               <span>{{category.meta.title}}</span>
             </template>
             <el-menu-item 
@@ -73,7 +75,7 @@
               </span>
 
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="exit">退出</el-dropdown-item>
+                <el-dropdown-item command="exit">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>

@@ -225,6 +225,7 @@
       @current-change="getData"
       :current-page.sync="formData.page"
       :page-size="formData.size"
+      :pager-count="11"
       layout="total, prev, pager, next"
       :total="total">
       </el-pagination>
@@ -316,7 +317,7 @@
                 </el-col>
             </el-row>
 
-            <el-form-item label="运营状态" prop="status">
+            <el-form-item label="设备状态" prop="status">
                 <el-radio-group v-model="formData.status">
                 <el-radio :label=0>使用</el-radio>
                 <el-radio :label=1>停用</el-radio>
@@ -361,7 +362,7 @@ export default {
       statusOptions: [
           {value: 0, label: '使用'},
           {value: 1, label: '停用'},
-          {value: 3, label: '故障'},
+          {value: 2, label: '故障'},
       ],// 状态选择
       brandOptions: [],// 品牌列表
       modelOptions: [],// 型号列表
@@ -396,7 +397,7 @@ export default {
   methods:{
     // 获取数据
     async getData(){
-      const rsp = await this.$api.getMobPhoneList(this.formData)
+      const rsp = await this.$api.getAccPhoneList(this.formData)
       if (!rsp) return false
       this.dataList = rsp.data.data.list
       this.total = rsp.data.data.total
@@ -438,7 +439,7 @@ export default {
     },
     // 下载表格
     async downloadExcel(){
-      const rsp = await this.$api.downloadMobPhone()
+      const rsp = await this.$api.downloadAccPhone()
       if (!rsp) return 
       let dataList = []
       rsp.data.data.list.forEach(data => {
@@ -497,7 +498,7 @@ export default {
           type: 'warning'
         });
         if (result){
-          const rsp = await this.$api.deleteMobPhone(row.id)
+          const rsp = await this.$api.deleteAccPhone(row.id)
           if (!rsp) return
           if (rsp.data.code == 404){
               this.$message.error(rsp.data.msg)
@@ -512,7 +513,7 @@ export default {
       this.$refs.formData.validate(async (valid) => {
         if (valid){
             if (this.dialogTitle == '添加手机'){
-                const rsp = await this.$api.addMobPhone(this.formData)
+                const rsp = await this.$api.addAccPhone(this.formData)
                 if (!rsp) return
                 if (rsp.data.code == 201){// 手机已存在
                 this.$message.error(rsp.data.msg)
@@ -522,7 +523,7 @@ export default {
                 if (await this.getData()) this.$message.success(rsp.data.msg)
                 
             }else if(this.dialogTitle == '编辑手机'){
-                const rsp = await this.$api.editMobPhone(this.formData)
+                const rsp = await this.$api.editAccPhone(this.formData)
                 if (rsp.data.code == 404){// 节点不存在
                 this.$message.error(rsp.data.msg)
                 return

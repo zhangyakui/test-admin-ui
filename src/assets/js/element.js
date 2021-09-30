@@ -42,7 +42,7 @@ import {
     Popover,
     Tabs,
     TabPane,
-    
+    Empty
 
 
 
@@ -93,6 +93,7 @@ Vue.use(Avatar);
 Vue.use(Popover);
 Vue.use(Tabs);
 Vue.use(TabPane);
+Vue.use(Empty);
 
 
 // 提示类组件需挂载

@@ -224,6 +224,7 @@
       @current-change="getData"
       :current-page.sync="formData.page"
       :page-size="formData.size"
+      :pager-count="11"
       layout="total, prev, pager, next"
       :total="total">
       </el-pagination>
@@ -258,7 +259,7 @@
           <el-input size="mini" placeholder="请输入监控起始日期" v-model="formData.startTime"></el-input>
         </el-form-item>
 
-        <el-form-item label="截止日志" prop="endTime">
+        <el-form-item label="截止日期" prop="endTime">
           <el-input size="mini" placeholder="请输入监控截止日期" v-model="formData.endTime"></el-input>
         </el-form-item>
 
@@ -295,7 +296,8 @@ export default {
       },
       total: 0,
        rules: {
-        homeLink: [{ required: true, message: '请选择或创建平台镜像名称', trigger: ['blur', 'change'] }]
+        platform: [{ required: true, message: '请选择 或 创建平台镜像名称', trigger: ['blur', 'change'] }],
+        homeLink: [{ required: true, message: '请输入镜像主页', trigger: ['blur', 'change'] }]
       }
     }
   },

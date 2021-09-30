@@ -130,7 +130,7 @@
 
         <el-table-column
         prop="userInfo"
-        label="总收入"
+        label="总收益"
         min-width="80px"
         show-overflow-tooltip
         >
@@ -191,6 +191,7 @@
       @current-change="getData"
       :current-page.sync="formData.page"
       :page-size="formData.size"
+      :pager-count="11"
       layout="total, prev, pager, next"
       :total="total">
       </el-pagination>
@@ -297,7 +298,7 @@
       </el-table>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false; resetForm();" size="small">返 回</el-button>
+        <el-button @click="dialogFormVisible = false; resetForm();" size="small">关 闭</el-button>
       </div>
     </el-dialog>
   </div>
@@ -417,7 +418,7 @@ export default {
           worksList.push(works)
         }
       })
-      let header = ['分类', '昵称', '账号', '等级', '粉丝', '作品', '总浏览', '总收入', '实名姓名', '', '更新日期']
+      let header = ['分类', '昵称', '账号', '等级', '粉丝', '作品', '总浏览', '总收益', '实名姓名', '', '更新日期']
       this.$csv.downloadCsv(userList, { header }, "企鹅号-用户信息 [1-2].csv")
 
       header = ['分类', '昵称', '账号', 'ID', '标题', '浏览', '评论', '状态', '原因', '视频链接', '封面链接', '上传日期']

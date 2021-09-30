@@ -1,5 +1,5 @@
 <template>
-  <div class="qiehao page">
+  <div class="baijiahao page">
     <!-- 选项卡 -->
     <el-tabs v-model="activeName">
       <el-tab-pane label="基础账号" name="base"></el-tab-pane>
@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import Base from './qiehao/base.vue'
-import Detail from './qiehao/detail.vue'
-import Mapping from './qiehao/mapping.vue'
+import Base from './baijiahao/base.vue'
+import Detail from './baijiahao/detail.vue'
+import Mapping from './baijiahao/mapping.vue'
 export default {
   data() {
     return {

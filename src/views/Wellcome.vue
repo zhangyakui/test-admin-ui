@@ -27,6 +27,12 @@ export default {
 </script>
 
 <style scped>
+
+.wellcome{
+  height: 100%;
+  
+}
+
 .tips{
   background-color: #ecf8ff;
   height: 60px;

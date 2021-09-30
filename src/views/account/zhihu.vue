@@ -6,9 +6,12 @@
       <el-tab-pane label="用户信息" name="detail"></el-tab-pane>
       <el-tab-pane label="镜像映射" name="mapping"></el-tab-pane>
     </el-tabs>
-    <Base v-if="activeName == 'base'"></Base>
-    <Detail v-if="activeName == 'detail'"></Detail>
-    <Mapping v-if="activeName == 'mapping'"></Mapping>
+    
+    <keep-alive>
+      <Base v-if="activeName == 'base'"></Base>
+      <Detail v-if="activeName == 'detail'"></Detail>
+      <Mapping v-if="activeName == 'mapping'"></Mapping>
+    </keep-alive>
   </div>
 </template>
 

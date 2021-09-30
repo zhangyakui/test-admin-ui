@@ -112,7 +112,7 @@
         show-overflow-tooltip
         >
           <template slot-scope="scope" v-if="scope.row.userInfo">
-            <span>Lv{{scope.row.userInfo.level}}</span>
+            <span>{{scope.row.userInfo.level}}</span>
           </template>
         </el-table-column>
 
@@ -161,6 +161,17 @@
         </el-table-column>
 
         <el-table-column
+        prop="userInfo"
+        label="总收益"
+        min-width="80px"
+        show-overflow-tooltip
+        >
+          <template slot-scope="scope" v-if="scope.row.userInfo">
+            <span>{{scope.row.userInfo.totalIncome}}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column
         prop="updateTime"
         label="更新日期"
         min-width="150px"
@@ -190,6 +201,7 @@
       @current-change="getData"
       :current-page.sync="formData.page"
       :page-size="formData.size"
+      :pager-count="11"
       layout="total, prev, pager, next"
       :total="total">
       </el-pagination>
@@ -295,7 +307,7 @@
       </el-table>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false; resetForm();" size="small">返 回</el-button>
+        <el-button @click="dialogFormVisible = false; resetForm();" size="small">关 闭</el-button>
       </div>
     </el-dialog>
   </div>
@@ -366,6 +378,7 @@ export default {
           worksCount: '',
           playCount: '',
           commentCount: '',
+          totalIncome: '',
           url: '',
           updateTime: data.updateTime,
         }
@@ -376,6 +389,7 @@ export default {
           user.worksCount = userInfo.worksCount
           user.playCount = userInfo.playCount
           user.commentCount = userInfo.commentCount
+          user.totalIncome = userInfo.totalIncome
           user.url = userInfo.url
         }
         userList.push(user)
@@ -391,9 +405,9 @@ export default {
           commentCount: '',
           likeCount: '',
           collectCount: '',
+          updatedTime: '',
           url: '',
-          coverUrl: '',
-          updatedTime: ''
+          coverUrl: ''
         }
         if (worksInfo){
           worksInfo.forEach(item => {
@@ -413,7 +427,7 @@ export default {
           worksList.push(works)
         }
       })
-      let header = ['分类', '昵称', '账号', 'UID', '等级', '粉丝', '作品', '总浏览', '总评论', '主页链接', '更新日期']
+      let header = ['分类', '昵称', '账号', 'UID', '等级', '粉丝', '作品', '总浏览', '总评论', '总收益', '主页链接', '更新日期']
       this.$csv.downloadCsv(userList, { header }, "知乎-用户信息 [1-2].csv")
 
       header = ['分类', '昵称', '账号', 'ID', '标题', '浏览', '评论', '喜欢', '收藏', '视频链接', '封面链接', '上传日期']

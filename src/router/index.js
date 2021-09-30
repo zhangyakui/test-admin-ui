@@ -39,89 +39,121 @@ let mainPage =  {
     children: [
         {
             path: '/wellcome',
-            name: 'wellcome',
+            name: 'Wellcome',
             meta: {keepAlive: true},
             component: () => import('../views/Wellcome.vue')
         },
         // 系统管理
         {
             path: '/system/user',
-            name: 'user',
+            name: 'SysUser',
             meta: {keepAlive: true},
             component: () => import('../views/system/user.vue')
         },
         {
             path: '/system/role',
-            name: 'role',
+            name: 'SysRole',
             meta: {keepAlive: true},
             component: () => import('../views/system/role.vue')
         },
         {
             path: '/system/menu',
-            name: 'menu',
+            name: 'SysMenu',
             meta: {keepAlive: true},
             component: () => import('../views/system/menu.vue')
         },
         {
             path: '/system/log',
-            name: 'log',
+            name: 'SysLog',
             meta: {keepAlive: false},
             component: () => import('../views/system/log.vue')
         },
-        // 账号管理
+        // 资产管理
         {
             path: '/assets/phone',
-            name: 'mobPhone',
+            name: 'AssetsPhone',
             meta: {keepAlive: true},
             component: () => import('../views/assets/phone.vue')
+        },
+        {
+            path: '/assets/computer',
+            name: 'AssetsComputer',
+            meta: {keepAlive: true},
+            component: () => import('../views/assets/computer.vue')
+        },
+        {
+            path: '/assets/other',
+            name: 'AssetsOther',
+            meta: {keepAlive: true},
+            component: () => import('../views/assets/other.vue')
+        },
+        // 审批管理
+        {
+            path: '/approve/reimburse',
+            name: 'ApproveReimburse',
+            meta: {keepAlive: true},
+            component: () => import('../views/approve/reimburse.vue')
         },
         // 账号管理
         {
             path: '/account/phone',
-            name: 'phone',
+            name: 'AccPhone',
             meta: {keepAlive: true},
             component: () => import('../views/account/phone.vue')
         },
         {
             path: '/account/qq',
-            name: 'qq',
+            name: 'AccQq',
             meta: {keepAlive: true},
             component: () => import('../views/account/qq.vue')
         },
         {
             path: '/account/weixin',
-            name: 'weixin',
+            name: 'AccWeixin',
             meta: {keepAlive: true},
             component: () => import('../views/account/weixin.vue')
         },
         {
             path: '/account/qiehao',
-            name: 'qiehao',
+            name: 'AccQiehao',
             meta: {keepAlive: true},
             component: () => import('../views/account/qiehao.vue')
         },
         {
             path: '/account/zhihu',
-            name: 'zhihu',
+            name: 'AccZhihu',
             meta: {keepAlive: true},
             component: () => import('../views/account/zhihu.vue')
+        },
+        {
+            path: '/account/baijiahao',
+            name: 'AccBaijiahao',
+            meta: {keepAlive: true},
+            component: () => import('../views/account/baijiahao.vue')
+        },
+        // 邮件管理
+        {
+            path: '/email/ali',
+            name: 'EmailAli',
+            meta: {keepAlive: true},
+            component: () => import('../views/email/ali.vue')
         },
         // 文件管理
         {
             path: '/file/office',
-            name: 'office',
+            name: 'FileOffice',
             meta: {keepAlive: true},
             component: () => import('../views/file/office.vue')
         },
         {
             path: '/file/script',
-            name: 'script',
+            name: 'FileScript',
             meta: {keepAlive: true},
             component: () => import('../views/file/script.vue')
         },
         {
             path: '/file/app',
-            name: 'app',
+            name: 'FileApp',
             meta: {keepAlive: true},
             component: () => import('../views/file/app.vue')
         }

@@ -183,6 +183,7 @@
       <el-pagination
       @current-change="getData"
       :current-page.sync="formData.page"
+      :pager-count="11"
       :page-size="formData.size"
       layout="total, prev, pager, next"
       :total="total">
